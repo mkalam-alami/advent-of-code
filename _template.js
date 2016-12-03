@@ -1,8 +1,8 @@
-var utils = require('./utils');
+var u = require('./utils');
 
 var result = 0;
 
-utils.readInputAsLines(function(line) {
+u.readInputAsLines(function(line) {
 
 });
 
