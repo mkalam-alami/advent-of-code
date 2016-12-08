@@ -18,6 +18,7 @@ module.exports = {
 	createGrid: createGrid,
 	countGrid: countGrid,
 	sumGrid: sumGrid,
+	fillGrid: fillGrid,
 
 	sortObjectByKeys: sortObjectByKeys
 };
@@ -106,6 +107,15 @@ function countGrid(grid, value) {
 		total += countArray(line, value);
 	})
 	return total;
+}
+
+function fillGrid(grid, value) {
+	for (var i = 0; i < grid.length; i++) {
+		for (var j = 0; j < grid[0].length; j++) {
+			grid[i][j] = value;
+		}
+	}
+	return grid;
 }
 
 function sortObjectByKeys(obj) {
