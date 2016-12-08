@@ -1,10 +1,6 @@
 var u = require('./utils');
 
-// WIP
-
 var screen = u.createGrid(50, 6, ' ');
-
-//u.mockInput('rect 1x1\nrotate row y=0 by 10');
 
 u.readInputAsLines(function(line) {
 	var a = line.split(/[ =]/g);
