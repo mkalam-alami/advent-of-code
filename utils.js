@@ -39,7 +39,7 @@ function readInput(callback) {
 		callback(mock);
 	}
 	else {
-		var fileContents = fs.readFileSync(_callerFileName() + '.txt');
+		var fileContents = fs.readFileSync(_callerFileName(3) + '.txt');
 		callback(fileContents.toString());
 	}
 }
@@ -58,8 +58,9 @@ function readInputAsChars(callback) {
 	});
 }
 
-function _callerFileName() {
-	var traceElemBits = (new Error()).stack.split('\n')[4].split(/[\\:.]/g);
+function _callerFileName(stackOffset) {
+	stackOffset = stackOffset || 4;
+	var traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g);
 	return traceElemBits[traceElemBits.length - 4];
 }
 
