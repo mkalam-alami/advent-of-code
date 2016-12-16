@@ -1,4 +1,5 @@
 var fs = require('fs');
+var childProcess = require('child_process');
 
 var mock = null;
 
@@ -10,6 +11,8 @@ module.exports = {
 	readInputAsLines: readInputAsLines,
 	readInputAsChars: readInputAsChars,
 	mockInput: mockInput,
+	
+	clearScreen: clearScreen,
 
 	createArray: createArray,
 	countArray: countArray,
@@ -62,6 +65,11 @@ function _callerFileName(stackOffset) {
 	stackOffset = stackOffset || 4;
 	var traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g);
 	return traceElemBits[traceElemBits.length - 4];
+}
+
+function clearScreen(delay) {
+	childProcess.spawnSync('sleep', [(delay !== undefined) ? (delay/1000) : 0.1]);
+	process.stdout.write("\u001b[0J\u001b[1J\u001b[2J\u001b[0;0H\u001b[0;0W");
 }
 
 function createArray(length, value) {
