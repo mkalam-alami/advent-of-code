@@ -1,8 +1,10 @@
-var u = require('./utils');
+'use strict';
 
-var result = 0;
+let u = require('./utils');
 
-u.readInputAsLines(function(line) {
+let result = 0;
+
+u.readInputAsLines(function (line) {
 
 });
 

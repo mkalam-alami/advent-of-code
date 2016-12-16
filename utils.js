@@ -34,12 +34,12 @@ function mockInput(input) {
 	mock = input;
 }
 
-function readInput(callback) {
+function readInput(callback, indirect) {
 	if (mock) {
 		callback(mock);
 	}
 	else {
-		var fileContents = fs.readFileSync(_callerFileName(3) + '.txt');
+		var fileContents = fs.readFileSync(_callerFileName(indirect ? 4 : 3) + '.txt');
 		callback(fileContents.toString());
 	}
 }
@@ -47,7 +47,7 @@ function readInput(callback) {
 function readInputAsLines(callback) {
 	readInput(function(input) {
 		input.split('\n').forEach(callback);
-	});
+	}, true);
 }
 
 function readInputAsChars(callback) {
@@ -55,7 +55,7 @@ function readInputAsChars(callback) {
 		for (var i = 0; i < input.length; i++) {
 			callback(input[i]);
 		}
-	});
+	}, true);
 }
 
 function _callerFileName(stackOffset) {
