@@ -8,7 +8,7 @@ u.readInputAsLines(function(line) {
 	if (line.indexOf('value') == 0) {
 		var [,value,,,,targetBot] = line.split(' ');
 		init('bot' + targetBot);
-		assign(graph['bot' + targetBot], value);
+		assign(graph['bot' + targetBot], parseInt(value));
 	}
 	else {
 		var [,sourceBot,,,,lowType,lowId,,,,highType,highId] = line.split(' ');
@@ -53,3 +53,5 @@ while (progress) {
 		}
 	}
 }
+
+console.log(graph['output0'].lowValue * graph['output1'].lowValue * graph['output2'].lowValue);
