@@ -19,7 +19,7 @@ let pointer = 0, iteration = 0
 while (pointer < program.length - 1) {
 	printProgram(false);
 	let lineInfo = program[pointer];
-	let [instr, i1, i2] = [lineInfo.instr, lineInfo.i1, lineInfo.i2];
+	let [instr, i1, i2] = [lineInfo.instr, lineInfo.i1, lineInfo.i2]
 	switch (instr) {
 		case 'cpy':
 			if (lineInfo.i1numeric) registers[i2] = parseInt(i1)
@@ -52,4 +52,4 @@ function printProgram(force) {
 	}
 }
 
-printProgram(true);
+printProgram(true)

@@ -49,7 +49,7 @@ function readInput(callback, indirect) {
 
 function readInputAsLines(callback) {
 	readInput(function(input) {
-		input.split('\n').forEach(callback);
+		input.split(/\r?\n/g).forEach(callback);
 	}, true);
 }
 
