@@ -2,7 +2,7 @@
 
 let u = require('./utils')
 
-let registers = {a: 0, b: 0, c: 1, d: 0}
+let registers = {a: 0, b: 0, c: 0, d: 0}
 let program = []
 u.readInputAsLines(function (line) {
 	let [instr, i1, i2] = line.split(' ')
@@ -17,7 +17,7 @@ u.readInputAsLines(function (line) {
 
 let pointer = 0, iteration = 0
 while (pointer < program.length - 1) {
-	printProgram(false);
+	printProgram(true);
 	let lineInfo = program[pointer];
 	let [instr, i1, i2] = [lineInfo.instr, lineInfo.i1, lineInfo.i2]
 	switch (instr) {
@@ -41,8 +41,8 @@ while (pointer < program.length - 1) {
 }
 
 function printProgram(force) {
-	if (force || iteration++ % 100000 === 0) {
-		u.clearScreen(0)
+	if (force || iteration++ % 1000 === 0) {
+		u.clearScreen(100)
 		console.log(registers)
 		console.log("--------")
 		program.forEach(function(lineInfo, i) {
