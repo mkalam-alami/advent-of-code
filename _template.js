@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-let u = require('./utils');
+let u = require('./utils')
 
-let result = 0;
+let result = 0
 
 u.readInputAsLines(function (line) {
 
-});
+})
 
-console.log(result);
+console.log(result)
