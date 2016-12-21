@@ -4,22 +4,25 @@ let u = require('./utils')
 // example input
 // u.mockInput('swap position 4 with position 0\nswap letter d with letter b\nreverse positions 0 through 4\nrotate left 1 step\nmove position 1 to position 4\nmove position 3 to position 0\nrotate based on position of letter b\nrotate based on position of letter d')
 
+let rotationMap = {0:1, 1:3, 2:5, 3:7, 4:2, 5:4, 6:6, 7:0}
+let rotationReversedMap = {0:7, 1:0, 2:4, 3:1, 4:5, 5:2, 6:6, 7:3}
+
 let ops = []
 u.readInputAsLines(function (line) {
 	ops.push(line)
 })
 
-console.log(run('abcdefgh', false)) // pt. 1 
+console.log(run('abcdefgh', false), '\n\n') // pt. 1 
 console.log(run('fbgdceah', true)) // pt. 2
 
 function run(password, reversed) {
 	if (reversed) {
 		for (let i = ops.length - 1; i >= 0; i--) {
-			password = apply(ops[i], password, true)
+			password = apply(ops[i], password, reversed)
 		}
 	} else {
 		for (let i = 0; i < ops.length; i++) {
-			password = apply(ops[i], password, false)
+			password = apply(ops[i], password, reversed)
 		}
 	}
 	return password
@@ -45,15 +48,15 @@ function apply(line, password, reversed) {
 		if (line.indexOf('rotate based') === 0) {
 			// rotate based
 			let c = line.split(' ')[6]
-			amount = password.indexOf(c)
-			if (amount >= 4) amount++
-			amount++
+			let index = password.indexOf(c)
+			if (reversed) amount = rotationReversedMap[index] - index
+			else amount = rotationMap[index] - index
 		} else {
 			// rotate left/right
 			let [,rotateType,n] = line.split(' ')
 			amount = parseInt(n) * ((rotateType == 'left') ? -1 : 1)
+			if (reversed) amount *= -1
 		}
-		if (reversed) amount *= -1
 		let passwordLength = password.length
 		password = password.repeat(5)
 		password = password.slice(passwordLength * 2 - amount, passwordLength * 3 - amount)
@@ -64,11 +67,12 @@ function apply(line, password, reversed) {
 	} else {
 		// move
 		let [,,from,,,to] = line.split(' ').map(function(s) { return parseInt(s) })
+		if (reversed) [from, to] = [to, from]
 		let array = Array.from(password)
 		let c = array.splice(from, 1)
 		password = array.join('')
 		password = password.slice(0, to) + c + password.slice(to)
 	}
-	//console.log(line + '  -->  ' + password)
+	console.log(line + '  -->  ' + password)
 	return password
 }
