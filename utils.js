@@ -23,7 +23,9 @@ module.exports = {
 	sumGrid: sumGrid,
 	fillGrid: fillGrid,
 
-	sortObjectByKeys: sortObjectByKeys
+	sortObjectByKeys: sortObjectByKeys,
+	
+	setCharAt: setCharAt
 };
 
 function exit(message, afterNCalls) {
@@ -133,4 +135,8 @@ function sortObjectByKeys(obj) {
         result[key] = obj[key];
         return result;
     }, {});
+}
+
+function setCharAt(string, i, c) {
+	return string.slice(0, i) + c + string.slice(i + 1)
 }
