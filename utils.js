@@ -1,142 +1,141 @@
-var fs = require('fs');
-var childProcess = require('child_process');
+var fs = require('fs')
+var childProcess = require('child_process')
 
-var mock = null;
+var mock = null
 
 module.exports = {
-	l: console.log,
-	exit: exit,
+  l: console.log,
+  exit: exit,
 
-	readInput: readInput,
-	readInputAsLines: readInputAsLines,
-	readInputAsChars: readInputAsChars,
-	mockInput: mockInput,
-	
-	clearScreen: clearScreen,
+  readInput: readInput,
+  readInputAsLines: readInputAsLines,
+  readInputAsChars: readInputAsChars,
+  mockInput: mockInput,
 
-	createArray: createArray,
-	countArray: countArray,
-	sumArray: sumArray,
+  clearScreen: clearScreen,
 
-	createGrid: createGrid,
-	countGrid: countGrid,
-	sumGrid: sumGrid,
-	fillGrid: fillGrid,
+  createArray: createArray,
+  countArray: countArray,
+  sumArray: sumArray,
 
-	sortObjectByKeys: sortObjectByKeys,
-	
-	setCharAt: setCharAt
-};
+  createGrid: createGrid,
+  countGrid: countGrid,
+  sumGrid: sumGrid,
+  fillGrid: fillGrid,
 
-function exit(message, afterNCalls) {
-	if (afterNCalls) {
-		if (message) console.log(message);
-		process.exit(0);
-	}
+  sortObjectByKeys: sortObjectByKeys,
+
+  setCharAt: setCharAt
 }
 
-function mockInput(input) {
-	mock = input;
+function exit (message, afterNCalls) {
+  if (afterNCalls) {
+    if (message) console.log(message)
+    process.exit(0)
+  }
 }
 
-function readInput(callback, indirect) {
-	if (mock) {
-		callback(mock);
-	}
-	else {
-		var fileContents = fs.readFileSync(_callerFileName(indirect ? 4 : 3) + '.txt');
-		callback(fileContents.toString());
-	}
+function mockInput (input) {
+  mock = input
 }
 
-function readInputAsLines(callback) {
-	readInput(function(input) {
-		input.split(/\r?\n/g).forEach(callback);
-	}, true);
+function readInput (callback, indirect) {
+  if (mock) {
+    callback(mock)
+  } else {
+    var fileContents = fs.readFileSync(_callerFileName(indirect ? 4 : 3) + '.txt')
+    callback(fileContents.toString())
+  }
 }
 
-function readInputAsChars(callback) {
-	readInput(function(input) {
-		for (var i = 0; i < input.length; i++) {
-			callback(input[i]);
-		}
-	}, true);
+function readInputAsLines (callback) {
+  readInput(function (input) {
+    input.split(/\r?\n/g).forEach(callback)
+  }, true)
 }
 
-function _callerFileName(stackOffset) {
-	stackOffset = stackOffset || 4;
-	var traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g);
-	return traceElemBits[traceElemBits.length - 4];
+function readInputAsChars (callback) {
+  readInput(function (input) {
+    for (var i = 0; i < input.length; i++) {
+      callback(input[i])
+    }
+  }, true)
 }
 
-function clearScreen(delay) {
-	childProcess.spawnSync('sleep', [(delay !== undefined) ? (delay/1000) : 0.1]);
-	process.stdout.write("\u001b[0J\u001b[1J\u001b[2J\u001b[0;0H\u001b[0;0W");
+function _callerFileName (stackOffset) {
+  stackOffset = stackOffset || 4
+  var traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g)
+  return traceElemBits[traceElemBits.length - 4]
 }
 
-function createArray(length, value) {
-	return new Array(length).fill(value);
+function clearScreen (delay) {
+  childProcess.spawnSync('sleep', [(delay !== undefined) ? (delay / 1000) : 0.1])
+  process.stdout.write('\u001b[0J\u001b[1J\u001b[2J\u001b[0;0H\u001b[0;0W')
 }
 
-function createGrid(w, h, value) {
-	var grid = [];
-	for (var i = 0; i < w; i++) {
-		grid[i] = createArray(h, value);
-	}
-	return grid;
+function createArray (length, value) {
+  return new Array(length).fill(value)
 }
 
-function sumArray(array) {
-	var total = 0;
-	array.forEach(function(cell) {
-		total += cell;
-	})
-	return total;
+function createGrid (w, h, value) {
+  var grid = []
+  for (var i = 0; i < w; i++) {
+    grid[i] = createArray(h, value)
+  }
+  return grid
 }
 
-function sumGrid(grid) {
-	var total = 0;
-	grid.forEach(function(line) {
-		total += sumArray(line);
-	})
-	return total;
+function sumArray (array) {
+  var total = 0
+  array.forEach(function (cell) {
+    total += cell
+  })
+  return total
 }
 
-function countArray(array, value) {
-	var total = 0;
-	array.forEach(function(cell) {
-		if (cell === value) {
-			total++;
-		}
-	})
-	return total;
+function sumGrid (grid) {
+  var total = 0
+  grid.forEach(function (line) {
+    total += sumArray(line)
+  })
+  return total
 }
 
-function countGrid(grid, value) {
-	var total = 0;
-	grid.forEach(function(line) {
-		total += countArray(line, value);
-	})
-	return total;
+function countArray (array, value) {
+  var total = 0
+  array.forEach(function (cell) {
+    if (cell === value) {
+      total++
+    }
+  })
+  return total
 }
 
-function fillGrid(grid, value) {
-	for (var i = 0; i < grid.length; i++) {
-		for (var j = 0; j < grid[0].length; j++) {
-			grid[i][j] = value;
-		}
-	}
-	return grid;
+function countGrid (grid, value) {
+  var total = 0
+  grid.forEach(function (line) {
+    total += countArray(line, value)
+  })
+  return total
 }
 
-function sortObjectByKeys(obj) {
+function fillGrid (grid, value) {
+  for (var i = 0; i < grid.length; i++) {
+    for (var j = 0; j < grid[0].length; j++) {
+      grid[i][j] = value
+    }
+  }
+  return grid
+}
+
+function sortObjectByKeys (obj) {
 	// http://stackoverflow.com/a/29622653
-    return Object.keys(obj).sort().reduce(function (result, key) {
-        result[key] = obj[key];
-        return result;
-    }, {});
+  return Object.keys(obj).sort().reduce(function (result, key) {
+    result[key] = obj[key]
+    return result
+  }, {})
 }
 
-function setCharAt(string, i, c) {
-	return string.slice(0, i) + c + string.slice(i + 1)
+function setCharAt (string, i, c) {
+  return string.slice(0, i) + c + string.slice(i + 1)
 }

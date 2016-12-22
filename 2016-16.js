@@ -3,31 +3,31 @@ let u = require('./utils')
 
 let str = '11100010111110100'
 
-function fill(size, str) {
-	while (str.length < size) {
-		str = str + '0' + dragonify(str)
-	}
-	return str.slice(0, size)
+function fill (size, str) {
+  while (str.length < size) {
+    str = str + '0' + dragonify(str)
+  }
+  return str.slice(0, size)
 }
 
-function dragonify(str) {
-	let array = Array.from(str).reverse()
-	let result = ''
-	for (let c of array) {
-		result += c == '1' ? '0' : '1'
-	}
-	return result
+function dragonify (str) {
+  let array = Array.from(str).reverse()
+  let result = ''
+  for (let c of array) {
+    result += c == '1' ? '0' : '1'
+  }
+  return result
 }
 
-function checksum(str) {
-	while (str.length % 2 === 0) {
-		let nextStr = ''
-		for (let i = 0; i < str.length; i += 2) {
-			nextStr += (str[i] === str[i+1]) ? '1' : '0'
-		}
-		str = nextStr
-	}
-	return str
+function checksum (str) {
+  while (str.length % 2 === 0) {
+    let nextStr = ''
+    for (let i = 0; i < str.length; i += 2) {
+      nextStr += (str[i] === str[i + 1]) ? '1' : '0'
+    }
+    str = nextStr
+  }
+  return str
 }
 
 console.log('--- tests')
