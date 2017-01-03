@@ -12,6 +12,7 @@ module.exports = {
   readInputAsChars: readInputAsChars,
   mockInput: mockInput,
 
+  pause: pause,
   clearScreen: clearScreen,
 
   createArray: createArray,
@@ -68,8 +69,12 @@ function _callerFileName (stackOffset) {
   return traceElemBits[traceElemBits.length - 4]
 }
 
-function clearScreen (delay) {
+function pause(delay) {
   childProcess.spawnSync('sleep', [(delay !== undefined) ? (delay / 1000) : 0.1])
+}
+
+function clearScreen (delay) {
+  pause(delay)
   process.stdout.write('\u001b[0J\u001b[1J\u001b[2J\u001b[0;0H\u001b[0;0W')
 }
 
