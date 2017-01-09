@@ -1,7 +1,7 @@
-var fs = require('fs')
-var childProcess = require('child_process')
+let fs = require('fs')
+let childProcess = require('child_process')
 
-var mock = null
+let mock = null
 
 module.exports = {
   l: console.log,
@@ -23,6 +23,7 @@ module.exports = {
   countGrid: countGrid,
   sumGrid: sumGrid,
   fillGrid: fillGrid,
+  printGrid: printGrid,
 
   sortObjectByKeys: sortObjectByKeys,
 
@@ -44,7 +45,7 @@ function readInput (callback, indirect) {
   if (mock) {
     callback(mock)
   } else {
-    var fileContents = fs.readFileSync(_callerFileName(indirect ? 4 : 3) + '.txt')
+    let fileContents = fs.readFileSync(_callerFileName(indirect ? 4 : 3) + '.txt')
     callback(fileContents.toString())
   }
 }
@@ -57,7 +58,7 @@ function readInputAsLines (callback) {
 
 function readInputAsChars (callback) {
   readInput(function (input) {
-    for (var i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
       callback(input[i])
     }
   }, true)
@@ -65,7 +66,7 @@ function readInputAsChars (callback) {
 
 function _callerFileName (stackOffset) {
   stackOffset = stackOffset || 4
-  var traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g)
+  let traceElemBits = (new Error()).stack.split('\n')[stackOffset].split(/[\\:.]/g)
   return traceElemBits[traceElemBits.length - 4]
 }
 
@@ -83,15 +84,15 @@ function createArray (length, value) {
 }
 
 function createGrid (w, h, value) {
-  var grid = []
-  for (var i = 0; i < w; i++) {
+  let grid = []
+  for (let i = 0; i < w; i++) {
     grid[i] = createArray(h, value)
   }
   return grid
 }
 
 function sumArray (array) {
-  var total = 0
+  let total = 0
   array.forEach(function (cell) {
     total += cell
   })
@@ -99,7 +100,7 @@ function sumArray (array) {
 }
 
 function sumGrid (grid) {
-  var total = 0
+  let total = 0
   grid.forEach(function (line) {
     total += sumArray(line)
   })
@@ -107,7 +108,7 @@ function sumGrid (grid) {
 }
 
 function countArray (array, value) {
-  var total = 0
+  let total = 0
   array.forEach(function (cell) {
     if (cell === value) {
       total++
@@ -117,7 +118,7 @@ function countArray (array, value) {
 }
 
 function countGrid (grid, value) {
-  var total = 0
+  let total = 0
   grid.forEach(function (line) {
     total += countArray(line, value)
   })
@@ -125,12 +126,22 @@ function countGrid (grid, value) {
 }
 
 function fillGrid (grid, value) {
-  for (var i = 0; i < grid.length; i++) {
-    for (var j = 0; j < grid[0].length; j++) {
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
       grid[i][j] = value
     }
   }
   return grid
+}
+
+function printGrid(grid) {
+  for (let j = 0; j < grid[0].length; j++) {
+    let line = ''
+    for (let i = 0; i < grid.length; i++) {
+      line += grid[i][j]
+    }
+    console.log(line)
+  }
 }
 
 function sortObjectByKeys (obj) {
