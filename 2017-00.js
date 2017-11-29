@@ -24,7 +24,9 @@ u.readInput(function (line) {
 			sources = as
 			targets = bs
 		case 'B':
-			set(map, i, j, instr)
+			if (!map[i]) map[i] = []
+			map[i][j] = instr
+
 			furthest = Math.max(furthest, Math.abs(i) + Math.abs(j))
 			
 			sources = sources || bs
@@ -53,8 +55,3 @@ u.readInput(function (line) {
 
 console.log("Furthest: " + furthest)
 console.log("Furthest pair: " + furthestPair)
-
-function set(map, i, j, v) {
-	if (!map[i]) map[i] = []
-	map[i][j] = v
-}
