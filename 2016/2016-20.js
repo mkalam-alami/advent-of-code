@@ -1,6 +1,6 @@
 'use strict'
 
-let u = require('./utils')
+let u = require('../utils')
 
 let ranges = []
 

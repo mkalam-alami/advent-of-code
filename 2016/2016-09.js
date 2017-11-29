@@ -1,4 +1,4 @@
-var u = require('./utils')
+var u = require('../utils')
 
 u.readInput(function (line) {
   line = line.replace(/[ \r\n]/g, '')

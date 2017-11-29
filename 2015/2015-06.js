@@ -1,4 +1,4 @@
-var utils = require('./utils')
+var utils = require('../utils')
 
 var grid = utils.createGrid(1000, 1000, false)
 var grid2 = utils.createGrid(1000, 1000, false)

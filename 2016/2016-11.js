@@ -2,7 +2,7 @@
 
 // WORK IN PROGRESS
 
-let u = require('./utils')
+let u = require('../utils')
 
 // Floors setup
 

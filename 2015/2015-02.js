@@ -1,4 +1,4 @@
-var utils = require('./utils')
+var utils = require('../utils')
 
 var wrap = 0
 var ribbons = 0

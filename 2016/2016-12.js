@@ -1,6 +1,6 @@
 'use strict'
 
-let u = require('./utils')
+let u = require('../utils')
 
 let registers = {a: 0, b: 0, c: 0, d: 0}
 let program = []

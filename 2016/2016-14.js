@@ -1,4 +1,4 @@
-let u = require('./utils')
+let u = require('../utils')
 let md5 = require('js-md5')
 
 let hashes = []

@@ -1,6 +1,6 @@
 'use strict'
 
-let u = require('./utils')
+let u = require('../utils')
 
 const SIZE = 51
 const GOAL_X = 31, GOAL_Y = 39

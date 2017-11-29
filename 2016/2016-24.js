@@ -1,6 +1,6 @@
 'use strict'
 
-let u = require('./utils')
+let u = require('../utils')
 
 //let map = u.createGrid(11, 5)
 let map = u.createGrid(177, 45)

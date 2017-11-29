@@ -1,5 +1,5 @@
 'use strict'
-let u = require('./utils')
+let u = require('../utils')
 let md5 = require('js-md5')
 
 const DIRECTIONS = [{i:0,j:-1,c:'U'}, {i:0,j:1,c:'D'}, {i:-1,j:0,c:'L'}, {i:1,j:0,c:'R'}]

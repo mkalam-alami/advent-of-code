@@ -1,4 +1,4 @@
-var u = require('./utils')
+var u = require('../utils')
 
 var result = 0, result2 = 0, hypernet, outerAbba, innerAbba, abas, babs
 

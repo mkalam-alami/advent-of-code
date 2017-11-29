@@ -1,5 +1,5 @@
 'use strict'
-let u = require('./utils')
+let u = require('../utils')
 
 let str = '11100010111110100'
 

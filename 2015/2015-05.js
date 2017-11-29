@@ -1,4 +1,4 @@
-var utils = require('./utils')
+var utils = require('../utils')
 
 var total = 0, totalPt2 = 0
 

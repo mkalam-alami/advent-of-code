@@ -1,4 +1,4 @@
-var u = require('./utils')
+var u = require('../utils')
 
 var screen = u.createGrid(50, 6, ' ')
 

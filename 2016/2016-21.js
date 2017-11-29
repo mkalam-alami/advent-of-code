@@ -1,5 +1,5 @@
 'use strict'
-let u = require('./utils')
+let u = require('../utils')
 
 // example input
 // u.mockInput('swap position 4 with position 0\nswap letter d with letter b\nreverse positions 0 through 4\nrotate left 1 step\nmove position 1 to position 4\nmove position 3 to position 0\nrotate based on position of letter b\nrotate based on position of letter d')

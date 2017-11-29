@@ -1,4 +1,4 @@
-var utils = require('./utils')
+var utils = require('../utils')
 
 var santa = {i: 0, j: 0}, robot = {i: 0, j: 0}, noRobot = {i: 0, j: 0}, index = 0
 var visited = {}
