@@ -145,7 +145,7 @@ function printGrid(grid) {
 }
 
 function sortObjectByKeys (obj) {
-	// http://stackoverflow.com/a/29622653
+  // http://stackoverflow.com/a/29622653
   return Object.keys(obj).sort().reduce(function (result, key) {
     result[key] = obj[key]
     return result
