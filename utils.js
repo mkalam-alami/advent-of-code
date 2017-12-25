@@ -7,27 +7,29 @@ module.exports = {
   l: console.log,
   exit: exit,
 
-  readInput: readInput,
-  readInputAsLines: readInputAsLines,
-  readInputAsChars: readInputAsChars,
-  mockInput: mockInput,
+  readInput,
+  readInputAsLines,
+  readInputAsChars,
+  mockInput,
 
-  pause: pause,
-  clearScreen: clearScreen,
+  pause,
+  clearScreen,
 
-  createArray: createArray,
-  countArray: countArray,
-  sumArray: sumArray,
+  createArray,
+  countArray,
+  sumArray,
 
-  createGrid: createGrid,
-  countGrid: countGrid,
-  sumGrid: sumGrid,
-  fillGrid: fillGrid,
-  printGrid: printGrid,
+  createGrid,
+  countGrid,
+  sumGrid,
+  fillGrid,
+  printGrid,
 
-  sortObjectByKeys: sortObjectByKeys,
+  sortObjectByKeys,
 
-  setCharAt: setCharAt
+  setCharAt,
+
+  each
 }
 
 function exit (message, afterNCalls) {
@@ -154,4 +156,11 @@ function sortObjectByKeys (obj) {
 
 function setCharAt (string, i, c) {
   return string.slice(0, i) + c + string.slice(i + 1)
+}
+
+function each(o, callback) {
+  for (let key in o) {
+    let value = o[key]
+    callback(key, value)
+  }
 }
