@@ -1,7 +1,5 @@
 'use strict'
 
-// Source: https://twitter.com/_sorceress/status/935256907408867328
-
 let u = require('./utils')
 
 let sum = 3
