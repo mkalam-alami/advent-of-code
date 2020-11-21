@@ -1,0 +1,15 @@
+{
+  "name": "adventofcode",
+  "description": "Advent of Code",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {},
+  "scripts": {},
+  "config": {},
+  "author": "Marwane Kalam-Alami",
+  "license": "Proprietary",
+  "devDependencies": {
+    "js-md5": "^0.4.1",
+    "q": "^1.4.1"
+  }
+}
