@@ -1,7 +1,16 @@
+/**
+ * Alternate implementations:
+ * - Using structures & traits: https://gist.github.com/felippemr/6fc930a438613480b856b366b9e25e0b
+ * - Using filters & multi-valued return/destructuring: https://github.com/cXVpbnQ/aoc-rust/blob/main/day02/src/main.rs
+ */
+
 use std::fs;
+use std::time;
 use regex::Regex;
 
 fn main() {
+  let start = time::Instant::now();
+
   let example = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
   println!("EXAMPLE");
   part1(&example);
@@ -11,19 +20,22 @@ fn main() {
   println!("INPUT");
   part1(&input);
   part2(&input);
+
+  println!("Completed in {}ms", start.elapsed().as_millis());
 }
 
 fn part1(input: &str) {
   let mut valid_passwords = 0;
 
   for password_info in parse_password_infos(input) {
-    let min = String::from(password_info[0]).parse::<i32>().unwrap();
-    let max = String::from(password_info[1]).parse::<i32>().unwrap();
-    let letter = String::from(password_info[2]).chars().next().unwrap();
-    let password = String::from(password_info[4]);
+    let min = password_info[0].parse::<i32>().unwrap();
+    let max = password_info[1].parse::<i32>().unwrap();
+    let letter = password_info[2].chars().next().unwrap();
+    let password = password_info[4].chars();
 
     let mut found_letters = 0;
-    for c in password.chars() {
+    // Alternative: Regex::from_str(letter).unwrap().find_iter(password).for_each(|_| found_letters += 1);
+    for c in password {
       if c == letter {
         found_letters += 1;
       }
@@ -44,10 +56,10 @@ fn part2(input: &str) {
   let mut valid_passwords = 0;
 
   for password_info in parse_password_infos(input) {
-    let index1 = String::from(password_info[0]).parse::<usize>().unwrap();
-    let index2 = String::from(password_info[1]).parse::<usize>().unwrap();
-    let letter = String::from(password_info[2]).chars().next().unwrap();
-    let password = String::from(password_info[4]);
+    let index1 = password_info[0].parse::<usize>().unwrap();
+    let index2 = password_info[1].parse::<usize>().unwrap();
+    let letter = password_info[2].chars().next().unwrap();
+    let password = password_info[4];
 
     let mut matches = 0;
     if password.chars().nth(index1 - 1).unwrap() == letter {
