@@ -61,17 +61,10 @@ fn part2(input: &str) {
     let letter = password_info[2].chars().next().unwrap();
     let password = password_info[4];
 
-    let mut matches = 0;
-    if password.chars().nth(index1 - 1).unwrap() == letter {
-      matches += 1;
-    }
-    if password.chars().nth(index2 - 1).unwrap() == letter {
-      matches += 1;
-    }
-
-    if matches == 1 {
-      // println!("VALID   {} {} {} {}", index1, index2, letter, password);
+    if (password.chars().nth(index1 - 1).unwrap() == letter)
+      ^ (password.chars().nth(index2 - 1).unwrap() == letter) {
       valid_passwords += 1;
+      // println!("VALID   {} {} {} {}", index1, index2, letter, password);
     } else {
       // println!("INVALID {} {} {} {}", index1, index2, letter, password);
     }

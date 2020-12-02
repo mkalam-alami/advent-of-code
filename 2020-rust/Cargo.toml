@@ -9,3 +9,9 @@ path = "02.rs"
 
 [dependencies]
 regex = "1.4.2"
+
+[profile.release]
+# Executable size experiments
+opt-level = 'z'
+lto = true
+panic = 'abort'
