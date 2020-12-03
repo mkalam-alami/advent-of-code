@@ -4,8 +4,8 @@ version = "1.0.0"
 edition = "2018"
 
 [[bin]]
-name = "02"
-path = "02.rs"
+name = "aoc"
+path = "03.rs"
 
 [dependencies]
 regex = "1.4.2"
