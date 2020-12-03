@@ -12,54 +12,64 @@ fn main() {
   part2(&forest);
 }
 
-fn part1(forest: &Vec<String>) {
-  let result = trees_encountered(forest, 3, 1);
+struct Forest {
+  map: Vec<String>,
+  width: usize,
+  height: usize
+}
+
+trait TileMap {
+  fn get_tile(&self, x: usize, y: usize) -> char;
+}
+
+impl TileMap for Forest {
+  fn get_tile(&self, x: usize, y: usize) -> char {
+    return self.map[y].chars().nth(x).unwrap();
+  }
+}
+
+fn part1(forest: &Forest) {
+  let result = trees_encountered(forest, &(3, 1));
   println!("PT. 1 RESULT: {}", result);
   println!();
 }
 
-fn part2(forest: &Vec<String>) {
-  let mut result = trees_encountered(forest, 1, 1);
-  result *= trees_encountered(forest, 3, 1);
-  result *= trees_encountered(forest, 5, 1);
-  result *= trees_encountered(forest, 7, 1);
-  result *= trees_encountered(forest, 1, 2);
+fn part2(forest: &Forest) {
+  let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+
+  let result = slopes.iter()
+    .map(|slope| trees_encountered(forest, slope))
+    .fold(1, |acc, trees| acc * trees);
+
   println!("PT2. RESULT: {}", result);
   println!();
 }
 
-fn trees_encountered(forest: &Vec<String>, slope_x: usize, slope_y: usize) -> usize {
-  let mut world_x = 0;
-  let mut world_y = 0;
-  let forest_height = forest.len();
+fn trees_encountered(forest: &Forest, slope: &(usize, usize)) -> usize {
+  let mut world_pos: (usize, usize) = (0, 0);
 
   let mut trees_encountered = 0;
-  while world_y < forest_height {
-    let tree_encountered = is_tree(&forest, &world_x, &world_y);
-    if tree_encountered {
-      trees_encountered += 1;
-      // println!("Tree found at {} {}", world_x, world_y);
-    }
-    world_x += slope_x;
-    world_y += slope_y;
+  while world_pos.1 < forest.height {
+    trees_encountered += is_tree(&forest, &world_pos) as usize;
+    world_pos.0 += slope.0;
+    world_pos.1 += slope.1;
   }
 
-  println!("Trees encountered (slope of {}x{}): {}", slope_x, slope_y, trees_encountered);
+  println!("Trees encountered (slope of {}x{}): {}", slope.0, slope.1, trees_encountered);
   return trees_encountered;
 }
 
-fn load_forest(file_name: &str) -> Vec<String> {
+fn load_forest(file_name: &str) -> Forest {
   let input = fs::read_to_string(file_name).unwrap();
-  return input.lines().map(|s| s.to_string()).collect();
+  let map = input.lines().map(|s| s.to_string()).collect::<Vec<String>>();
+  let width = map[0].len();
+  let height = map.len();
+  return Forest { map, width, height };
 }
 
+fn is_tree(forest: &Forest, world_pos: &(usize, usize)) -> bool {
+  let forest_x = world_pos.0 % forest.width;
+  let forest_y = world_pos.1 % forest.height;
 
-fn is_tree(forest: &Vec<String>, world_x: &usize, world_y: &usize) -> bool {
-  let forest_width = forest[0].len();
-  let forest_height = forest.len();
-
-  let forest_x = world_x % forest_width;
-  let forest_y = world_y % forest_height;
-
-  return forest[forest_y].chars().nth(forest_x).unwrap() == '#';
+  return forest.get_tile(forest_x, forest_y) == '#';
 }
