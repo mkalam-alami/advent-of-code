@@ -1,4 +1,5 @@
 use std::fs;
+use std::ops;
 
 fn main() {
   let forest_example = load_forest("03-example.txt");
@@ -12,30 +13,37 @@ fn main() {
   part2(&forest);
 }
 
+struct Vec2(usize, usize); // Using "tuple struct" syntax https://doc.rust-lang.org/1.9.0/book/structs.html#tuple-structs
+impl ops::Add<&Vec2> for Vec2 {
+  type Output = Vec2;
+
+  fn add(self, point: &Vec2) -> Vec2 {
+    return Vec2(self.0 + point.0, self.1 + point.1);
+  }
+}
+
 struct Forest {
   map: Vec<String>,
   width: usize,
   height: usize
 }
-
 trait TileMap {
-  fn get_tile(&self, x: usize, y: usize) -> char;
+  fn get_tile(&self, coords: &Vec2) -> char;
 }
-
 impl TileMap for Forest {
-  fn get_tile(&self, x: usize, y: usize) -> char {
-    return self.map[y].chars().nth(x).unwrap();
+  fn get_tile(&self, coords: &Vec2) -> char {
+    return self.map[coords.1].chars().nth(coords.0).unwrap();
   }
 }
 
 fn part1(forest: &Forest) {
-  let result = trees_encountered(forest, &(3, 1));
+  let result = trees_encountered(forest, &Vec2(3, 1));
   println!("PT. 1 RESULT: {}", result);
   println!();
 }
 
 fn part2(forest: &Forest) {
-  let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+  let slopes = [Vec2(1, 1), Vec2(3, 1), Vec2(5, 1), Vec2(7, 1), Vec2(1, 2)];
 
   let result = slopes.iter()
     .map(|slope| trees_encountered(forest, slope))
@@ -45,14 +53,13 @@ fn part2(forest: &Forest) {
   println!();
 }
 
-fn trees_encountered(forest: &Forest, slope: &(usize, usize)) -> usize {
-  let mut world_pos: (usize, usize) = (0, 0);
+fn trees_encountered(forest: &Forest, slope: &Vec2) -> usize {
+  let mut world_pos = Vec2(0, 0);
 
   let mut trees_encountered = 0;
   while world_pos.1 < forest.height {
     trees_encountered += is_tree(&forest, &world_pos) as usize;
-    world_pos.0 += slope.0;
-    world_pos.1 += slope.1;
+    world_pos = world_pos + slope;
   }
 
   println!("Trees encountered (slope of {}x{}): {}", slope.0, slope.1, trees_encountered);
@@ -67,9 +74,7 @@ fn load_forest(file_name: &str) -> Forest {
   return Forest { map, width, height };
 }
 
-fn is_tree(forest: &Forest, world_pos: &(usize, usize)) -> bool {
-  let forest_x = world_pos.0 % forest.width;
-  let forest_y = world_pos.1 % forest.height;
-
-  return forest.get_tile(forest_x, forest_y) == '#';
+fn is_tree(forest: &Forest, world_pos: &Vec2) -> bool {
+  let forest_coords = Vec2(world_pos.0 % forest.width, world_pos.1 % forest.height);
+  return forest.get_tile(&forest_coords) == '#';
 }
