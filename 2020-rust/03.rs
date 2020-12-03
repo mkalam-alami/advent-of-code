@@ -1,3 +1,8 @@
+/**
+ * Alternate implementations:
+ * - Using types & consts, partial type declaration with _: https://github.com/ttencate/aoc2020/blob/master/src/bin/03.rs
+ */
+
 use std::fs;
 use std::ops;
 
@@ -45,20 +50,20 @@ fn part1(forest: &Forest) {
 fn part2(forest: &Forest) {
   let slopes = [Vec2(1, 1), Vec2(3, 1), Vec2(5, 1), Vec2(7, 1), Vec2(1, 2)];
 
-  let result = slopes.iter()
+  let result: u64 = slopes.iter()
     .map(|slope| trees_encountered(forest, slope))
-    .fold(1, |acc, trees| acc * trees);
+    .fold(1, |acc, trees| acc * trees); // or even shorter: .product()
 
   println!("PT2. RESULT: {}", result);
   println!();
 }
 
-fn trees_encountered(forest: &Forest, slope: &Vec2) -> usize {
+fn trees_encountered(forest: &Forest, slope: &Vec2) -> u64 {
   let mut world_pos = Vec2(0, 0);
 
   let mut trees_encountered = 0;
   while world_pos.1 < forest.height {
-    trees_encountered += is_tree(&forest, &world_pos) as usize;
+    trees_encountered += is_tree(&forest, &world_pos) as u64;
     world_pos = world_pos + slope;
   }
 
