@@ -9,6 +9,7 @@ path = "04.rs"
 
 [dependencies]
 regex = "1.4.2"
+lazy_static = "1.4.0"
 
 [profile.release]
 # Executable size experiments
