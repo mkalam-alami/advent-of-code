@@ -56,8 +56,6 @@ fn part2(numbers: &Vec<i64>, goal: &i64) {
     println!("PT.2: {} is the weakness", result.unwrap().1);
 }
 
-
-
 fn get_preamble(numbers: &Vec<i64>, for_index: &usize, preamble_size: usize) -> Vec<i64> {
     let start = for_index - preamble_size - 1;
     let end = for_index;

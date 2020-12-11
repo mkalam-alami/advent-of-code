@@ -37,19 +37,19 @@ fn part2(adapters: &Vec<i64>) {
   println!("PT.2: {}", count);
 }
 
-fn count_arrangements(current_adapter: &i64, adapters: &Vec<i64>, count_cache: &mut HashMap<i64, i64>) -> i64 {
+fn count_arrangements(current_adapter: &i64, remaining_adapters: &Vec<i64>, count_cache: &mut HashMap<i64, i64>) -> i64 {
   if count_cache.contains_key(current_adapter) {
     return count_cache[current_adapter];
   }
-  if adapters.len() <= 1 {
+  if remaining_adapters.len() <= 1 {
     return 1;
   }
 
-  let acc = adapters.iter().take_while(|j| **j <= current_adapter + 3)
+  let acc = remaining_adapters.iter().take_while(|j| **j <= current_adapter + 3)
     .map(|compatible_adapter| {
       count_arrangements(
         compatible_adapter,
-        &adapters.iter().filter_map(|j| if j > compatible_adapter { Some(*j) } else { None }).collect(),
+        &remaining_adapters.iter().filter_map(|j| if j > compatible_adapter { Some(*j) } else { None }).collect(),
         count_cache)
     })
     .sum();

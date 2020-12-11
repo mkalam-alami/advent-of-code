@@ -5,7 +5,7 @@ edition = "2018"
 
 [[bin]]
 name = "aoc"
-path = "10.rs"
+path = "11.rs"
 
 [dependencies]
 regex = "1.4.2"
