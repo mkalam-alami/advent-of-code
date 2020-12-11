@@ -12,15 +12,14 @@ fn main() {
     println!("\nINPUT\n----------");
     part1(&boat);
 
-    println!("Completed in {}ms", start.elapsed().as_millis());
+    println!("\nCompleted in {}ms", start.elapsed().as_millis());
 }
 
 fn part1(boat: &Boat) {
     let mut state = boat.clone();
-    let mut iteration_count = 0;
+    // let mut iteration_count = 0;
 
     loop {
-        iteration_count += 1;
 
         let result = iteration(&state, &iteration_cell_pt1);
         let state_has_changed = result.0;
@@ -29,9 +28,11 @@ fn part1(boat: &Boat) {
         if !state_has_changed {
             break;
         }
-        if iteration_count % 10 == 0 {
-            println!("iteration {}...", iteration_count);
-        }
+
+        // iteration_count += 1;
+        // if iteration_count % 10 == 0 {
+        //     println!("iteration {}...", iteration_count);
+        // }
     }
 
     println!("PT.1: {}", state.count_occupied());
@@ -39,7 +40,7 @@ fn part1(boat: &Boat) {
 
 fn iteration(boat: &Boat, iteration_cell: &dyn Fn(&Boat, &i64, &i64) -> char) -> (bool, Boat) {
     let mut has_changed = false;
-    let seats: Vec<String> = (0..boat.height)
+    let seats: Vec<Vec<char>> = (0..boat.height)
         .map(|y| {
             (0..boat.width)
                 .map(|x| {
@@ -104,19 +105,19 @@ fn count_around(boat: &Boat, x: &i64, y: &i64, token: char) -> i64 {
 }
 
 struct Boat {
-    seats: Vec<String>,
+    seats: Vec<Vec<char>>,
     height: i64,
     width: i64,
 }
 
 impl Boat {
     fn get_seat(&self, x: &i64, y: &i64) -> char {
-        self.seats[*y as usize].chars().nth(*x as usize).unwrap()
+        self.seats[*y as usize][*x as usize]
     }
     fn count_occupied(&self) -> i64 {
         self.seats
             .iter()
-            .map(|l| l.chars().filter(|c| c == &'#').count() as i64)
+            .map(|l| l.iter().filter(|c| *c == &'#').count() as i64)
             .sum()
     }
     fn clone(&self) -> Boat {
@@ -132,8 +133,8 @@ fn read_input(file_name: &str) -> Boat {
     let seats = fs::read_to_string(file_name)
         .unwrap()
         .lines()
-        .map(|l| l.to_owned())
-        .collect::<Vec<String>>();
+        .map(|l| l.chars().collect())
+        .collect::<Vec<Vec<char>>>();
     Boat {
         width: seats[0].len() as i64,
         height: seats.len() as i64,
