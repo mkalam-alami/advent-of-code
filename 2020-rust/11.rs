@@ -1,3 +1,8 @@
+/**
+ * Alternate implementations:
+ * - Using enums, #[derive] and custom implems of standard traits: https://github.com/ttencate/aoc2020/blob/master/src/bin/11.rs
+ */
+
 use std::fs;
 use std::time::Instant;
 
