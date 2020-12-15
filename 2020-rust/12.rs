@@ -48,11 +48,6 @@ impl BoatPt1 {
     BoatPt1 { x: 0, y: 0, rot: 0 }
   }
 }
-impl Display for BoatPt1 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Boat[x={},y={},rot={},manhattan={}]", self.x, self.y, self.rot, self.x.abs() + self.y.abs())
-    }
-}
 
 fn part2(input: &Vec<Command>) {
   let mut boat = BoatPt2::new();

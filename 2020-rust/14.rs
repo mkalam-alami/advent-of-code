@@ -1,14 +1,55 @@
-use std::{fmt::Display, fs};
+use std::{collections::HashMap, fmt::Display, fs};
 use regex::Regex;
 
 fn main() {
   let input = read_input("14-example.txt");
   part1(&input);
+
+  let input = read_input("14.txt");
+  part1(&input);
 }
 
 fn part1(input: &Vec<Command>) {
+  let mut current_mask = String::new();
+  let mut memory: HashMap<i64, i64> = HashMap::new();
   input.iter()
-    .for_each(|c| println!("{}", c));
+    .for_each(|command| {
+      // println!("{}", command);
+      if command.mask.is_some() {
+        current_mask = command.mask.as_ref().unwrap().clone();
+      } else {
+        let write = command.write.as_ref().unwrap();
+        memory.insert(write.address, apply_mask(&current_mask, &write.value));
+      }
+    });
+
+  println!("PT.1: {}", memory.values().sum::<i64>());
+}
+
+
+fn apply_mask(mask: &String, input: &i64) -> i64 {
+  let mut mask_chars = mask.chars();
+  let input = format!("{:#038b} ", input).split_at(2).1.to_string();
+  let mut input_chars = input.chars();
+
+  // println!("{} {}", mask, input);
+  let mut output = String::new();
+  loop {
+    let mask_char = mask_chars.next();
+    let input_char = input_chars.next();
+    
+    if mask_char.is_none() {
+      break;
+    }
+
+    output.push(match mask_char.unwrap() {
+      'X' => input_char.unwrap(),
+      _ =>mask_char.unwrap()
+    });
+  }
+
+  // println!(" ==> {}", output);
+  i64::from_str_radix(output.as_str(), 2).unwrap()
 }
 
 struct Command {
