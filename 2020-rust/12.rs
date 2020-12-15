@@ -17,17 +17,18 @@ fn part1(input: &Vec<Command>) {
   let mut boat = BoatPt1::new();
   for command in input {
     match command.letter {
-      CommandLetter::N => boat.y += command.value,
-      CommandLetter::E => boat.x += command.value,
-      CommandLetter::S => boat.y -= command.value,
-      CommandLetter::W => boat.x -= command.value,
-      CommandLetter::L => boat.rot += command.value,
-      CommandLetter::R => boat.rot -= command.value,
-      CommandLetter::F => {
+      'N' => boat.y += command.value,
+      'E' => boat.x += command.value,
+      'S' => boat.y -= command.value,
+      'W' => boat.x -= command.value,
+      'L' => boat.rot += command.value,
+      'R' => boat.rot -= command.value,
+      'F' => {
         let dir = (rad(boat.rot).cos(), rad(boat.rot).sin());
         boat.x += command.value * dir.0.round() as i64;
         boat.y += command.value * dir.1.round() as i64;
-      }
+      },
+      _ => panic!("unknown letter {}", command.letter)
     }
   }
   println!("{}", boat);
@@ -56,28 +57,34 @@ impl Display for BoatPt1 {
 fn part2(input: &Vec<Command>) {
   let mut boat = BoatPt2::new();
   for command in input {
+    // println!("{}{}", command.letter, command.value);
     match command.letter {
-      CommandLetter::N => boat.wy += command.value,
-      CommandLetter::E => boat.wx += command.value,
-      CommandLetter::S => boat.wy -= command.value,
-      CommandLetter::W => boat.wx -= command.value,
-      CommandLetter::L => {
-        let buf = boat.wx;
-        boat.wx = -boat.wy;
-        boat.wy = buf;
+      'N' => boat.wy += command.value,
+      'E' => boat.wx += command.value,
+      'S' => boat.wy -= command.value,
+      'W' => boat.wx -= command.value,
+      'L' => {
+        for _ in 0..(command.value / 90) {
+          let buf = boat.wx;
+          boat.wx = -boat.wy;
+          boat.wy = buf;
+        }
       },
-      CommandLetter::R => {
-        let buf = boat.wx;
-        boat.wx = boat.wy;
-        boat.wy = -buf;
+      'R' => {
+        for _ in 0..(command.value / 90) {
+          let buf = boat.wx;
+          boat.wx = boat.wy;
+          boat.wy = -buf;
+        }
       },
-      CommandLetter::F => {
+      'F' => {
         boat.x += command.value * boat.wx;
         boat.y += command.value * boat.wy;
-      }
+      },
+      _ => panic!("unknown letter {}", command.letter)
     }
   }
-  println!("{}", boat); // not 13907
+  println!("{}", boat);
 }
 
 struct BoatPt2 {
@@ -97,12 +104,8 @@ impl Display for BoatPt2 {
     }
 }
 
-enum CommandLetter {
-  N, E, S, W, L, R, F
-}
-
 struct Command {
-  letter: CommandLetter,
+  letter: char,
   value: i64
 }
 
@@ -111,16 +114,7 @@ fn read_input(file_name: &str) -> Vec<Command> {
     .lines()
     .map(|l| l.split_at(1))
     .map(|(c, value)| Command {
-      letter: match c.chars().next().unwrap() {
-        'N' => CommandLetter::N,
-        'E' => CommandLetter::E,
-        'S' => CommandLetter::S,
-        'W' => CommandLetter::W,
-        'L' => CommandLetter::L,
-        'R' => CommandLetter::R,
-        'F' => CommandLetter::F,
-        _ => panic!("unknown command letter"),
-      },
+      letter: c.chars().next().unwrap(),
       value: value.parse::<i64>().unwrap()
     })
     .collect()
