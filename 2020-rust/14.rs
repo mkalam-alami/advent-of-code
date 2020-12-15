@@ -1,12 +1,22 @@
+#[macro_use]
+extern crate lazy_static;
+
 use std::{collections::HashMap, fmt::Display, fs};
 use regex::Regex;
+
+lazy_static! {
+  static ref X: Regex = regex::Regex::new("X").unwrap();
+}
 
 fn main() {
   let input = read_input("14-example.txt");
   run(&input, &apply_mask_pt1);
 
-  let input = read_input("14.txt");
-  run(&input, &apply_mask_pt1);
+  let input = read_input("14-example-2.txt");
+  run(&input, &apply_mask_pt2);
+
+  // let input = read_input("14.txt");
+  // run(&input, &apply_mask_pt1);
 }
 
 fn run(input: &Vec<Command>, memory_writer: &dyn Fn(&mut HashMap<i64, i64>, &String, &Write) -> ()) {
@@ -23,12 +33,12 @@ fn run(input: &Vec<Command>, memory_writer: &dyn Fn(&mut HashMap<i64, i64>, &Str
       }
     });
 
-  println!("PT.1: {}", memory.values().sum::<i64>());
+  println!("RESULT: {}", memory.values().sum::<i64>());
 }
 
 fn apply_mask_pt1(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) -> () {
   let mut mask_chars = mask.chars();
-  let input = format!("{:#038b} ", write.value).split_at(2).1.to_string();
+  let input = to_binary(write.value);
   let mut input_chars = input.chars();
 
   // println!("{} {}", mask, input);
@@ -36,7 +46,6 @@ fn apply_mask_pt1(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) 
   loop {
     let mask_char = mask_chars.next();
     let input_char = input_chars.next();
-    
     if mask_char.is_none() {
       break;
     }
@@ -48,7 +57,50 @@ fn apply_mask_pt1(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) 
   }
 
   // println!(" ==> {}", output);
-  memory.insert(write.address, i64::from_str_radix(output.as_str(), 2).unwrap());
+  memory.insert(write.address, from_binary(&output));
+}
+
+fn apply_mask_pt2(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) -> () {
+  let mut mask_chars = mask.chars();
+  let address = to_binary(write.address);
+  let mut address_chars = address.chars();
+
+  // println!("{} {}", mask, input);
+  let mut masked_address = String::new();
+  loop {
+    let mask_char = mask_chars.next();
+    let address_char = address_chars.next();
+    if mask_char.is_none() {
+      break;
+    }
+
+    masked_address.push(match mask_char.unwrap() {
+      '0' => address_char.unwrap(),
+      _ => mask_char.unwrap()
+    });
+  }
+
+  // println!(" ==> {}", output);
+  expand_floating_bits(&masked_address)
+    .iter()
+    .for_each(|address| { memory.insert(from_binary(address), write.value); });
+}
+
+fn expand_floating_bits(input: &String) -> Vec<String> {
+  let _x_count = X.captures(input).unwrap().len();
+  let result: Vec<String> = Vec::new();
+
+  // TODO
+
+  result
+}
+
+fn to_binary(input: i64) -> String {
+  format!("{:#038b} ", input).split_at(2).1.to_string()
+}
+
+fn from_binary(input: &String) -> i64 {
+  i64::from_str_radix(input.as_str(), 2).unwrap()
 }
 
 struct Command {
