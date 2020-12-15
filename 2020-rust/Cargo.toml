@@ -5,7 +5,7 @@ edition = "2018"
 
 [[bin]]
 name = "aoc"
-path = "14.rs"
+path = "15.rs"
 
 [dependencies]
 regex = "1.4.2"
@@ -14,6 +14,6 @@ bigdecimal = "0.2.0"
 
 [profile.release]
 # Executable size experiments
-opt-level = 'z'
-lto = true
-panic = 'abort'
+#opt-level = 'z'
+#lto = true
+#panic = 'abort'
