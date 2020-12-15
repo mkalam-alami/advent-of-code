@@ -3,13 +3,13 @@ use regex::Regex;
 
 fn main() {
   let input = read_input("14-example.txt");
-  part1(&input);
+  run(&input, &apply_mask_pt1);
 
   let input = read_input("14.txt");
-  part1(&input);
+  run(&input, &apply_mask_pt1);
 }
 
-fn part1(input: &Vec<Command>) {
+fn run(input: &Vec<Command>, memory_writer: &dyn Fn(&mut HashMap<i64, i64>, &String, &Write) -> ()) {
   let mut current_mask = String::new();
   let mut memory: HashMap<i64, i64> = HashMap::new();
   input.iter()
@@ -19,17 +19,16 @@ fn part1(input: &Vec<Command>) {
         current_mask = command.mask.as_ref().unwrap().clone();
       } else {
         let write = command.write.as_ref().unwrap();
-        memory.insert(write.address, apply_mask(&current_mask, &write.value));
+        memory_writer(&mut memory, &current_mask, &write);
       }
     });
 
   println!("PT.1: {}", memory.values().sum::<i64>());
 }
 
-
-fn apply_mask(mask: &String, input: &i64) -> i64 {
+fn apply_mask_pt1(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) -> () {
   let mut mask_chars = mask.chars();
-  let input = format!("{:#038b} ", input).split_at(2).1.to_string();
+  let input = format!("{:#038b} ", write.value).split_at(2).1.to_string();
   let mut input_chars = input.chars();
 
   // println!("{} {}", mask, input);
@@ -49,7 +48,7 @@ fn apply_mask(mask: &String, input: &i64) -> i64 {
   }
 
   // println!(" ==> {}", output);
-  i64::from_str_radix(output.as_str(), 2).unwrap()
+  memory.insert(write.address, i64::from_str_radix(output.as_str(), 2).unwrap());
 }
 
 struct Command {
