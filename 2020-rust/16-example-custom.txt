@@ -1,0 +1,14 @@
+departure location: 33-679 or 691-971
+departure station: 48-646 or 671-966
+departure platform: 37-601 or 619-950
+arrival location: 30-542 or 556-960
+seat: 34-888 or 914-968
+
+your ticket:
+10,10,10,109,113
+
+nearby tickets:
+33,48,37,30,34
+679,646,601,542,888
+691,671,619,556,914
+971,966,950,960,968
