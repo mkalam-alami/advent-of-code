@@ -15,8 +15,9 @@ fn main() {
   let input = read_input("14-example-2.txt");
   run(&input, &apply_mask_pt2);
 
-  // let input = read_input("14.txt");
-  // run(&input, &apply_mask_pt1);
+  let input = read_input("14.txt");
+  run(&input, &apply_mask_pt1);
+  run(&input, &apply_mask_pt2);
 }
 
 fn run(input: &Vec<Command>, memory_writer: &dyn Fn(&mut HashMap<i64, i64>, &String, &Write) -> ()) {
@@ -80,19 +81,20 @@ fn apply_mask_pt2(memory: &mut HashMap<i64, i64>, mask: &String, write: &Write) 
     });
   }
 
-  // println!(" ==> {}", output);
+  // println!("{} ==> {}", &masked_address, expand_floating_bits(&masked_address).join(","));
   expand_floating_bits(&masked_address)
     .iter()
     .for_each(|address| { memory.insert(from_binary(address), write.value); });
 }
 
 fn expand_floating_bits(input: &String) -> Vec<String> {
-  let _x_count = X.captures(input).unwrap().len();
-  let result: Vec<String> = Vec::new();
-
-  // TODO
-
-  result
+  if input.find("X").is_some() {
+    let mut results = expand_floating_bits(&input.clone().replacen("X", "0", 1));
+    results.append(&mut expand_floating_bits(&input.clone().replacen("X", "1", 1)));
+    return results;
+  } else {
+    return vec![input.clone()];
+  }
 }
 
 fn to_binary(input: i64) -> String {
