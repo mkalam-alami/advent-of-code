@@ -5,12 +5,13 @@ edition = "2018"
 
 [[bin]]
 name = "aoc"
-path = "14.rs"
+path = "17.rs"
 
 [dependencies]
-regex = "1.4.2"
-lazy_static = "1.4.0"
-bigdecimal = "0.2.0"
+regex = "1.4"
+lazy_static = "1.4"
+bigdecimal = "0.2"
+pancurses = "0.16"
 
 [profile.release]
 # Executable size experiments
