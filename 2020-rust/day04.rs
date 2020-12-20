@@ -1,13 +1,13 @@
 #[macro_use]
 extern crate lazy_static;
 
-mod lib;
+mod day04rules;
 
 use std::fs;
 use std::time;
 use std::collections::HashMap;
 use regex;
-use lib::rules04;
+use day04rules;
 
 type Passport = HashMap<String, String>;
 
