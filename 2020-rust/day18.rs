@@ -7,23 +7,23 @@ use regex::Regex;
 use bigdecimal::BigDecimal;
 
 lazy_static! {
-  static ref NUMBER: Regex = Regex::new("^([0-9]+)$").unwrap();
-  static ref NUMBER_IN_PARENTHESES: Regex = Regex::new("\\(([0-9]+)\\)").unwrap();
-  static ref SIMPLE_PLUS_EXPR: Regex = Regex::new("([0-9]+)\\+([0-9]+)").unwrap();
-  static ref SIMPLE_MULT_EXPR: Regex = Regex::new("([0-9]+)\\*([0-9]+)").unwrap();
-  static ref COMPLEX_EXPR_IN_PARENTHESES: Regex = Regex::new("\\([0-9+*]{4,}\\)").unwrap();
+  static ref NUMBER_REGEX: Regex = Regex::new("^([0-9]+)$").unwrap();
+  static ref NUMBER_IN_PARENTHESES_REGEX: Regex = Regex::new("\\(([0-9]+)\\)").unwrap();
+  static ref SIMPLE_PLUS_EXPR_REGEX: Regex = Regex::new("([0-9]+)\\+([0-9]+)").unwrap();
+  static ref SIMPLE_MULT_EXPR_REGEX: Regex = Regex::new("([0-9]+)\\*([0-9]+)").unwrap();
+  static ref SUB_EXPRESSION_REGEX: Regex = Regex::new("\\(([0-9]+[+*][0-9+*]+)\\)").unwrap();
 }
 
 fn main() {
   let input = read_input("day18-examples.txt");
   println!("EXAMPLE\n----------");
   part1(&input, true);
-  part2(&input, true);
+  part2(&input, 1);
 
   let input = read_input("day18.txt");
   println!("\nINPUT\n----------");
   part1(&input, false);
-  part2(&input, false); // more than 145129606953052
+  part2(&input, 0);
 }
 
 fn part1(input: &Vec<String>, verbose: bool) {
@@ -38,51 +38,58 @@ fn part1(input: &Vec<String>, verbose: bool) {
   println!("SUM: {}\n", sum);
 }
 
-fn part2(input: &Vec<String>, verbose: bool) {
+fn part2(input: &Vec<String>, verbose_level: i8) {
   let sum: BigDecimal = input.iter().map(|line| {
-    evaluate_expression(line.clone(), verbose)
+    if verbose_level > 1 {
+      println!("  {}", line);
+    }
+    let expression = evaluate_expression(line.clone(), verbose_level);
+    if verbose_level > 0 {
+      println!("{} = {}", line, expression);
+    }
+    expression
   }).sum();
   println!("SUM: {}", sum);
 }
 
-fn evaluate_expression(input: String, verbose: bool) -> BigDecimal {
+fn evaluate_expression(input: String, verbose_level: i8) -> BigDecimal {
   let mut expression = input.clone();
 
-  while !NUMBER.is_match(expression.as_str()) {
-    // println!("{}", expression);
-
-    while let Some(captures) = COMPLEX_EXPR_IN_PARENTHESES.captures(expression.as_str()) {
-      let inside_expression = strp(captures.get(0));
-      expression = expression.replace(inside_expression,
-      evaluate_expression(inside_expression[1..inside_expression.len()-1].to_string(), false).to_string().as_str());
+  while !NUMBER_REGEX.is_match(expression.as_str()) {
+    expression = evaluate_step(expression);
+    if verbose_level > 1 {
+      println!("  {}", expression);
     }
-
-    while let Some(captures) = SIMPLE_PLUS_EXPR.captures(expression.as_str()) {
-      // println!("added {}  +  {} to make {} {}", expression, captures.get(0).unwrap().a, usize(captures.get(1)), usize(captures.get(2)));
-      expression = expression.replace(strp(captures.get(0)),
-        (decimal(captures.get(1)) + decimal(captures.get(2))).to_string().as_str() );
-      if let Some(captures) = NUMBER_IN_PARENTHESES.captures(expression.as_str()) {
-        expression = expression.replace(strp(captures.get(0)), strp(captures.get(1)));
-      }
-      // println!("{}", expression);
-    }
-
-    while let Some(captures) = SIMPLE_MULT_EXPR.captures(expression.as_str()) {
-      expression = expression.replace(strp(captures.get(0)),
-        (decimal(captures.get(1)) * decimal(captures.get(2))).to_string().as_str() );
-        // println!("{}", expression);
-      if let Some(captures) = NUMBER_IN_PARENTHESES.captures(expression.as_str()) {
-        expression = expression.replace(strp(captures.get(0)), strp(captures.get(1)));
-      }
-      // println!("{}", expression);
-    }
-  }
-
-  if verbose {
-    println!("{} = {}", input, expression);
   }
 
   BigDecimal::parse_bytes(expression.as_bytes(), 10).unwrap()
+}
+
+fn evaluate_step(expression: String) -> String {
+  if let Some(captures) = NUMBER_IN_PARENTHESES_REGEX.captures(expression.as_str()) {
+    return expression.replacen(strp(captures.get(0)), strp(captures.get(1)), 1);
+  }
+
+  if let Some(captures) = SUB_EXPRESSION_REGEX.captures(expression.as_str()) {
+    let sub_expression = strp(captures.get(0));
+    return expression.replacen(sub_expression,
+    evaluate_expression(strp(captures.get(1)).to_string(), 0).to_string().as_str(), 1);
+  }
+
+  if let Some(captures) = SIMPLE_PLUS_EXPR_REGEX.captures(expression.as_str()) {
+    // println!("added {}  +  {} to make {} {}", expression, captures.get(0).unwrap().a, usize(captures.get(1)), usize(captures.get(2)));
+    return expression.replacen(strp(captures.get(0)),
+      (decimal(captures.get(1)) + decimal(captures.get(2))).to_string().as_str(), 1);
+    // println!("{}", expression);
+  }
+
+  if let Some(captures) = SIMPLE_MULT_EXPR_REGEX.captures(expression.as_str()) {
+    // println!("{}", expression);
+    return expression.replacen(strp(captures.get(0)),
+      (decimal(captures.get(1)) * decimal(captures.get(2))).to_string().as_str(), 1);
+  }
+
+  panic!("no rule found to simplify: {}", expression);
 }
 
 fn strp(option: Option<Match>) -> &str {
