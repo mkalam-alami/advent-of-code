@@ -3,4 +3,5 @@ node_modules
 *~
 *.exe
 *.pdb
+*.pdf
 target
