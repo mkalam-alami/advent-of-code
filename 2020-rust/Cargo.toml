@@ -8,7 +8,7 @@ name = "aoc"
 path = "day18.rs"
 
 [dependencies]
-regex = "1.4"
+regex = "1.5"
 lazy_static = "1.4"
 bigdecimal = "0.2"
 pancurses = "0.16"
